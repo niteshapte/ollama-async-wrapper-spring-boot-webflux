@@ -14,19 +14,31 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ollama-async-wrapper</name>
 	<description>Ollama Async Wrapper</description>
-	<url />
+	<url>https://github.com/niteshapte/ollama-async-wrapper-spring-boot-webflux</url>
 	<licenses>
-		<license />
-	</licenses>
+        	<license>
+            		<name>GNU General Public License, Version 3.0</name>
+            		<url>https://www.gnu.org/licenses/gpl-3.0.en.html</url>
+            		<distribution>repo</distribution>
+        	</license>
+    	</licenses>
 	<developers>
-		<developer />
-	</developers>
+	        <developer>
+	            <id>niteshapte</id>
+	            <name>Nitesh Apte</name>
+	            <email></email>
+	            <url>https://github.com/niteshapte</url>
+	            <organization></organization>
+	            <organizationUrl></organizationUrl>
+	        </developer>
+    	</developers>
 	<scm>
-		<connection />
-		<developerConnection />
-		<tag />
-		<url />
+	    <connection>scm:git:git://github.com/niteshapte/ollama-async-wrapper-spring-boot-webflux.git</connection>
+	    <developerConnection>scm:git:ssh://github.com:niteshapte/ollama-async-wrapper-spring-boot-webflux.git</developerConnection>
+	    <tag>HEAD</tag>
+	    <url>https://github.com/niteshapte/ollama-async-wrapper-spring-boot-webflux</url>
 	</scm>
+
 	<properties>
 		<java.version>21</java.version>
 	</properties>
