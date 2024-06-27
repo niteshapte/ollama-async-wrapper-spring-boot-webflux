@@ -1,4 +1,4 @@
-# ollama-async-wrapper-spring-boot-webflux
+# Ollama Async Wrapper using Spring Boot Webflux
 This project provides a Spring Boot WebFlux application that acts as an asynchronous wrapper around a local LLM service called Ollama. The wrapper adds rate limiting, delay, and circuit breaker functionalities to ensure stable and reliable interactions with Ollama.
 
 ## Features
