@@ -13,3 +13,10 @@ This project provides a Spring Boot WebFlux application that acts as an asynchro
 - Java 11 or higher
 - Maven or Gradle
 - Ollama service running locally on port 11434
+
+## Endpoints
+
+- /ollama/generate
+- /ollama/generate/stream
+- /ollama/chat
+- /ollama/chat/stream
