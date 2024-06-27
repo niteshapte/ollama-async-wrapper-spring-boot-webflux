@@ -21,6 +21,8 @@ This project provides a Spring Boot WebFlux application that acts as an asynchro
 - /ollama/chat
 - /ollama/chat/stream
 
+## Running the project
+
 ### Clone the Repository
 
 ```bash
@@ -35,7 +37,16 @@ cd ollama-async-wrapper-spring-boot-webflux
 ```
 
 ### Run the Application
+
 ```bash
 ./mvnw spring-boot:run
 ```
 
+### Send a Test Request
+
+```bash
+curl -X POST "http://localhost:5151/ollama/generate" -H "Content-Type: application/json" -d '{
+  "model": "llama3",
+  "prompt": "Hi!"
+}'
+```
