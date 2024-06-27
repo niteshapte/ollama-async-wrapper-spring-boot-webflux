@@ -26,7 +26,7 @@ This project provides a Spring Boot WebFlux application that acts as an asynchro
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/your-project](https://github.com/niteshapte/ollama-async-wrapper-spring-boot-webflux.git
+git clone https://github.com/niteshapte/ollama-async-wrapper-spring-boot-webflux.git
 cd ollama-async-wrapper-spring-boot-webflux
 ```
 
