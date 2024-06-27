@@ -20,3 +20,22 @@ This project provides a Spring Boot WebFlux application that acts as an asynchro
 - /ollama/generate/stream
 - /ollama/chat
 - /ollama/chat/stream
+
+### Clone the Repository
+
+```bash
+git clone [https://github.com/your-username/your-project](https://github.com/niteshapte/ollama-async-wrapper-spring-boot-webflux.git
+cd ollama-async-wrapper-spring-boot-webflux
+```
+
+### Build the Project
+
+```bash
+./mvnw clean install
+```
+
+### Run the Application
+```bash
+./mvnw spring-boot:run
+```
+
