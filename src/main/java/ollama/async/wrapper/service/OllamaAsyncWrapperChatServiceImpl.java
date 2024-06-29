@@ -14,6 +14,8 @@ import io.github.resilience4j.reactor.ratelimiter.operator.RateLimiterOperator;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
+import reactor.util.retry.Retry;
 
 @RequiredArgsConstructor
 @Service
@@ -21,7 +23,7 @@ public class OllamaAsyncWrapperChatServiceImpl implements OllamaAsyncWrapperChat
 	
 	private final WebClient webClient;
 	private final RateLimiter rateLimiter;
-    private final CircuitBreaker circuitBreaker;
+        private final CircuitBreaker circuitBreaker;
 
 	public Mono<String> ollamaChat(String payload) {
 		return Mono.just(payload)
@@ -36,7 +38,11 @@ public class OllamaAsyncWrapperChatServiceImpl implements OllamaAsyncWrapperChat
                         .contentType(MediaType.APPLICATION_JSON)
                         .bodyValue(request)
                         .retrieve()
-                        .bodyToMono(String.class));
+                        .bodyToMono(String.class)
+                        .timeout(Duration.ofSeconds(60))
+                        .retry(3)
+                        .doOnError(Throwable::printStackTrace))
+				.subscribeOn(Schedulers.boundedElastic());
 	}
 	
 	public Flux<String> ollamaChatStream(String payload) {
@@ -52,6 +58,10 @@ public class OllamaAsyncWrapperChatServiceImpl implements OllamaAsyncWrapperChat
                         .contentType(MediaType.APPLICATION_JSON)
                         .bodyValue(request)
                         .retrieve()
-                        .bodyToFlux(String.class));
+                        .bodyToFlux(String.class)
+                        .timeout(Duration.ofSeconds(60))
+                        .retryWhen(Retry.backoff(3, Duration.ofSeconds(1)).maxBackoff(Duration.ofSeconds(5)))
+                        .doOnError(Throwable::printStackTrace))
+                .subscribeOn(Schedulers.boundedElastic());
 	}
 }
