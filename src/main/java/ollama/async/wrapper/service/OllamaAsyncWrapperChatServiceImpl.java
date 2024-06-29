@@ -42,7 +42,7 @@ public class OllamaAsyncWrapperChatServiceImpl implements OllamaAsyncWrapperChat
                         .timeout(Duration.ofSeconds(60))
                         .retry(3)
                         .doOnError(Throwable::printStackTrace))
-				.subscribeOn(Schedulers.boundedElastic());
+		.subscribeOn(Schedulers.boundedElastic());
 	}
 	
 	public Flux<String> ollamaChatStream(String payload) {
