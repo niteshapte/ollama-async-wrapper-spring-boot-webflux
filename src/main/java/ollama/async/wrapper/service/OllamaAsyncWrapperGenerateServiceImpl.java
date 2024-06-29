@@ -42,7 +42,7 @@ public class OllamaAsyncWrapperGenerateServiceImpl implements OllamaAsyncWrapper
                         .timeout(Duration.ofSeconds(60))
                         .retry(3)
                         .doOnError(Throwable::printStackTrace))
-				.subscribeOn(Schedulers.boundedElastic());
+		.subscribeOn(Schedulers.boundedElastic());
 	}		
 	
 	public Flux<String> ollamaGenerateStream(String payload) {
