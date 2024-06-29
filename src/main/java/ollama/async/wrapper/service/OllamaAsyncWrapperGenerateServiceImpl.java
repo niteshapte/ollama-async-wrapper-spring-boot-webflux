@@ -14,6 +14,8 @@ import io.github.resilience4j.reactor.ratelimiter.operator.RateLimiterOperator;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
+import reactor.util.retry.Retry;
 
 @RequiredArgsConstructor
 @Service
@@ -21,7 +23,7 @@ public class OllamaAsyncWrapperGenerateServiceImpl implements OllamaAsyncWrapper
 
 	private final WebClient webClient;
 	private final RateLimiter rateLimiter;
-    private final CircuitBreaker circuitBreaker;
+        private final CircuitBreaker circuitBreaker;
     
 	public Mono<String> ollamaGenerate(String payload) {
 		return Mono.just(payload)
@@ -29,15 +31,19 @@ public class OllamaAsyncWrapperGenerateServiceImpl implements OllamaAsyncWrapper
                 .transformDeferred(CircuitBreakerOperator.of(circuitBreaker))
                 .onErrorResume(RequestNotPermitted.class, e -> Mono.error(new RuntimeException("Rate limit exceeded, please try again later")))
                 .onErrorResume(Throwable.class, e -> Mono.error(new RuntimeException("Service is currently unavailable, please try again later")))
-                .delayElement(Duration.ofSeconds(1)) 
+                .delayElement(Duration.ofMillis(500)) 
                 .flatMap(request -> webClient.post()
                         .uri("/api/generate")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .bodyValue(request)
                         .retrieve()
-                        .bodyToMono(String.class));
-	}
+                        .bodyToMono(String.class)
+                        .timeout(Duration.ofSeconds(60))
+                        .retry(3)
+                        .doOnError(Throwable::printStackTrace))
+				.subscribeOn(Schedulers.boundedElastic());
+	}		
 	
 	public Flux<String> ollamaGenerateStream(String payload) {
 		return Mono.just(payload)
@@ -52,6 +58,10 @@ public class OllamaAsyncWrapperGenerateServiceImpl implements OllamaAsyncWrapper
                         .contentType(MediaType.APPLICATION_JSON)
                         .bodyValue(request)
                         .retrieve()
-                        .bodyToFlux(String.class));
+                        .bodyToFlux(String.class)
+                        .timeout(Duration.ofSeconds(60))
+                        .retryWhen(Retry.backoff(3, Duration.ofSeconds(1)).maxBackoff(Duration.ofSeconds(5)))
+                        .doOnError(Throwable::printStackTrace))
+                .subscribeOn(Schedulers.boundedElastic());
 	}
 }
