@@ -12,7 +12,8 @@ This project provides a Spring Boot WebFlux application that acts as an asynchro
 
 ## Requirements
 
-- Java 11 or higher
+- Java 21. But it will work for Java 8 and higher
+- Spring Boot 3.3.1. But it will work with previous versions as well
 - Maven or Gradle
 - Ollama service running locally on port 11434
 
