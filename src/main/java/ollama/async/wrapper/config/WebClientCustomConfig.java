@@ -14,9 +14,21 @@ import io.netty.handler.timeout.WriteTimeoutHandler;
 import reactor.netty.http.client.HttpClient;
 import reactor.netty.transport.logging.AdvancedByteBufFormat;
 
+/**
+ * Configuration class for customizing a WebClient instance using Reactor Netty.
+ * <p>
+ * This configuration sets up a WebClient with a custom HttpClient that includes connection
+ * and response timeouts, read and write timeouts, and wiretap logging for debugging purposes.
+ * The WebClient instance is configured with a base URL pointing to "http://localhost:11434".
+ */
 @Configuration
 public class WebClientCustomConfig {
 
+	/**
+     	* Defines a custom WebClient bean with a Reactor Netty HttpClient configuration.
+     	*
+     	* @return WebClient instance configured with a custom Reactor Netty HttpClient.
+     	*/
 	@Bean
 	WebClient webClient() {
 		HttpClient httpClient = HttpClient.create()
