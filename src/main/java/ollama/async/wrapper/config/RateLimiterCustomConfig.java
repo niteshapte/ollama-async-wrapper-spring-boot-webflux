@@ -20,6 +20,7 @@ public class RateLimiterCustomConfig {
 
 	/**
      	* Defines a custom Rate Limiter bean with specified configuration parameters.
+        * The configuration parameter can be made dynamic via properties or yaml file.
      	*
      	* @return RateLimiter instance configured with custom parameters.
      	*/
