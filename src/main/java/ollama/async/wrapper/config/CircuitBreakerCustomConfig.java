@@ -20,6 +20,7 @@ public class CircuitBreakerCustomConfig {
 
 	/**
      	* Defines a custom CircuitBreaker bean with specified configuration parameters.
+      	* The configuration parameter can be made dynamic via properties or yaml file.
      	*
      	* @return CircuitBreaker instance configured with custom parameters.
      	*/
