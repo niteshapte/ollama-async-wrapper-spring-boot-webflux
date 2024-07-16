@@ -17,6 +17,15 @@ import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 import reactor.util.retry.Retry;
 
+
+/**
+ * Service implementation for handling asynchronous Ollama generation operations.
+ * <p>
+ * This service class utilizes WebClient to communicate with an external generation API asynchronously.
+ * It integrates Resilience4j's RateLimiter and CircuitBreaker to manage the rate of requests
+ * and handle failures respectively. The generation operations support both single request and streaming
+ * scenarios with retry and timeout mechanisms configured.
+ */
 @RequiredArgsConstructor
 @Service
 public class OllamaAsyncWrapperGenerateServiceImpl implements OllamaAsyncWrapperGenerateService {
@@ -24,7 +33,14 @@ public class OllamaAsyncWrapperGenerateServiceImpl implements OllamaAsyncWrapper
 	private final WebClient webClient;
 	private final RateLimiter rateLimiter;
         private final CircuitBreaker circuitBreaker;
-    
+
+	
+	/**
+	* Initiates an asynchronous generation request.
+	*
+	* @param payload The JSON payload containing generation request details.
+	* @return A Mono emitting a String representing the generation response.
+	*/
 	public Mono<String> ollamaGenerate(String payload) {
 		return Mono.just(payload)
                 .transformDeferred(RateLimiterOperator.of(rateLimiter))
@@ -44,7 +60,13 @@ public class OllamaAsyncWrapperGenerateServiceImpl implements OllamaAsyncWrapper
                         .doOnError(Throwable::printStackTrace))
 		.subscribeOn(Schedulers.boundedElastic());
 	}		
-	
+
+	/**
+	* Initiates an asynchronous streaming generation request.
+	*
+	* @param payload The JSON payload containing generation request details.
+	* @return A Flux emitting String events representing the streaming generation responses.
+	*/
 	public Flux<String> ollamaGenerateStream(String payload) {
 		return Mono.just(payload)
                 .transformDeferred(RateLimiterOperator.of(rateLimiter))
