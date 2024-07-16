@@ -26,6 +26,7 @@ public class WebClientCustomConfig {
 
 	/**
      	* Defines a custom WebClient bean with a Reactor Netty HttpClient configuration.
+        * The configuration parameter can be made dynamic via properties or yaml file.
      	*
      	* @return WebClient instance configured with a custom Reactor Netty HttpClient.
      	*/
