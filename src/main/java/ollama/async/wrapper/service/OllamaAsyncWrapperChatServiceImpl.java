@@ -17,6 +17,14 @@ import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 import reactor.util.retry.Retry;
 
+/**
+ * Service implementation for handling asynchronous Ollama chat operations.
+ * <p>
+ * This service class utilizes WebClient to communicate with an external chat API asynchronously.
+ * It integrates Resilience4j's RateLimiter and CircuitBreaker to manage the rate of requests
+ * and handle failures respectively. The chat operations support both single request and streaming
+ * scenarios with retry and timeout mechanisms configured.
+ */
 @RequiredArgsConstructor
 @Service
 public class OllamaAsyncWrapperChatServiceImpl implements OllamaAsyncWrapperChatService {
@@ -25,6 +33,12 @@ public class OllamaAsyncWrapperChatServiceImpl implements OllamaAsyncWrapperChat
 	private final RateLimiter rateLimiter;
         private final CircuitBreaker circuitBreaker;
 
+	/**
+     	* Initiates an asynchronous chat request.
+     	*
+     	* @param payload The JSON payload containing chat request details.
+     	* @return A Mono emitting a String representing the chat response.
+     	*/
 	public Mono<String> ollamaChat(String payload) {
 		return Mono.just(payload)
                 .transformDeferred(RateLimiterOperator.of(rateLimiter))
@@ -44,7 +58,13 @@ public class OllamaAsyncWrapperChatServiceImpl implements OllamaAsyncWrapperChat
                         .doOnError(Throwable::printStackTrace))
 		.subscribeOn(Schedulers.boundedElastic());
 	}
-	
+
+	/**
+     	* Initiates an asynchronous streaming chat request.
+     	*
+     	* @param payload The JSON payload containing chat request details.
+     	* @return A Flux emitting String events representing the streaming chat responses.
+     	*/
 	public Flux<String> ollamaChatStream(String payload) {
 		return Mono.just(payload)
                 .transformDeferred(RateLimiterOperator.of(rateLimiter))
